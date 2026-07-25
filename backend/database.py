@@ -4,24 +4,21 @@ DATABASE_NAME = "../database/healthguard.db"
 
 
 def get_connection():
-    """
-    Create and return a SQLite connection.
-    """
     conn = sqlite3.connect(DATABASE_NAME)
     conn.row_factory = sqlite3.Row
     return conn
 
 
 def create_tables():
-    """
-    Create users table if it doesn't already exist.
-    """
 
     conn = get_connection()
     cursor = conn.cursor()
 
+    # -----------------------------
+    # Users Table
+    # -----------------------------
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS users(
 
             id INTEGER PRIMARY KEY AUTOINCREMENT,
 
@@ -36,14 +33,50 @@ def create_tables():
         )
     """)
 
+    # -----------------------------
+    # Prediction History Table
+    # -----------------------------
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS prediction_history(
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            user_email TEXT NOT NULL,
+
+            pregnancies INTEGER,
+
+            glucose REAL,
+
+            blood_pressure REAL,
+
+            skin_thickness REAL,
+
+            insulin REAL,
+
+            bmi REAL,
+
+            diabetes_pedigree_function REAL,
+
+            age INTEGER,
+
+            prediction TEXT,
+
+            probability REAL,
+
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+        )
+    """)
+
     conn.commit()
     conn.close()
 
 
+# =====================================
+# USER FUNCTIONS
+# =====================================
+
 def user_exists(email):
-    """
-    Check if email already exists.
-    """
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -61,9 +94,6 @@ def user_exists(email):
 
 
 def create_user(name, email, password):
-    """
-    Insert new user.
-    """
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -81,9 +111,6 @@ def create_user(name, email, password):
 
 
 def login_user(email):
-    """
-    Return user by email.
-    """
 
     conn = get_connection()
     cursor = conn.cursor()
@@ -98,3 +125,85 @@ def login_user(email):
     conn.close()
 
     return user
+
+
+# =====================================
+# PREDICTION HISTORY FUNCTIONS
+# =====================================
+
+def save_prediction(
+    user_email,
+    pregnancies,
+    glucose,
+    blood_pressure,
+    skin_thickness,
+    insulin,
+    bmi,
+    dpf,
+    age,
+    prediction,
+    probability
+):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO prediction_history(
+
+            user_email,
+            pregnancies,
+            glucose,
+            blood_pressure,
+            skin_thickness,
+            insulin,
+            bmi,
+            diabetes_pedigree_function,
+            age,
+            prediction,
+            probability
+
+        )
+
+        VALUES(?,?,?,?,?,?,?,?,?,?,?)
+        """,
+        (
+            user_email,
+            pregnancies,
+            glucose,
+            blood_pressure,
+            skin_thickness,
+            insulin,
+            bmi,
+            dpf,
+            age,
+            prediction,
+            probability
+        )
+    )
+
+    conn.commit()
+    conn.close()
+
+
+def get_prediction_history(user_email):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM prediction_history
+        WHERE user_email=?
+        ORDER BY created_at DESC
+        """,
+        (user_email,)
+    )
+
+    history = cursor.fetchall()
+
+    conn.close()
+
+    return history

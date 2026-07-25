@@ -7,7 +7,9 @@ from database import (
     create_tables,
     create_user,
     user_exists,
-    login_user
+    login_user,
+    save_prediction,
+    get_prediction_history
 )
 
 from auth import (
@@ -128,11 +130,50 @@ def predict():
 
     result = "Diabetic" if prediction == 1 else "Not Diabetic"
 
+    save_prediction(
+        data["user_email"],
+        data["Pregnancies"],
+        data["Glucose"],
+        data["BloodPressure"],
+        data["SkinThickness"],
+        data["Insulin"],
+        data["BMI"],
+        data["DiabetesPedigreeFunction"],
+        data["Age"],
+        result,
+        round(probability * 100, 2)
+    )
+
     return jsonify({
         "prediction": result,
         "probability": round(probability * 100, 2)
     })
 
 
+# ===========================================
+# Prediction History API
+# ===========================================
+@app.route("/history", methods=["POST"])
+def history():
+
+    data = request.get_json()
+
+    history = get_prediction_history(data["user_email"])
+
+    history_list = []
+
+    for row in history:
+        history_list.append({
+            "prediction": row["prediction"],
+            "probability": row["probability"],
+            "glucose": row["glucose"],
+            "bmi": row["bmi"],
+            "age": row["age"],
+            "date": row["created_at"]
+        })
+
+    return jsonify(history_list)
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="127.0.0.1", port=5001, debug=True)

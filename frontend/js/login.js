@@ -17,7 +17,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
     try {
 
-        const response = await fetch("http://127.0.0.1:5000/login", {
+        const response = await fetch("http://127.0.0.1:5001/login", {
 
             method: "POST",
 
@@ -49,9 +49,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
             }, 1000);
 
-        }
-
-        else {
+        } else {
 
             message.style.color = "red";
 
@@ -59,9 +57,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
         }
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(error);
 

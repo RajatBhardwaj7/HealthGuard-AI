@@ -1,11 +1,25 @@
 document.getElementById("predictionForm").addEventListener("submit", async function (e) {
+
     e.preventDefault();
 
     const resultDiv = document.getElementById("result");
+
     resultDiv.style.display = "block";
     resultDiv.innerHTML = "<h2>⏳ Predicting...</h2>";
 
+    // Get logged-in user
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    // If user is not logged in
+    if (!user) {
+        alert("Please login first.");
+        window.location.href = "pages/login.html";
+        return;
+    }
+
     const data = {
+        user_email: user.email,
+
         Pregnancies: Number(document.getElementById("Pregnancies").value),
         Glucose: Number(document.getElementById("Glucose").value),
         BloodPressure: Number(document.getElementById("BloodPressure").value),
@@ -18,12 +32,16 @@ document.getElementById("predictionForm").addEventListener("submit", async funct
 
     try {
 
-        const response = await fetch("http://127.0.0.1:5000/predict", {
+        const response = await fetch("http://127.0.0.1:5001/predict", {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify(data)
+
         });
 
         const result = await response.json();
@@ -86,4 +104,5 @@ document.getElementById("predictionForm").addEventListener("submit", async funct
             <h2 style="color:red;">❌ Cannot connect to backend.</h2>
         `;
     }
+
 });

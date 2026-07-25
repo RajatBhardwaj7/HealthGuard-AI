@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>HealthGuard-AI</title>
 
     <link rel="stylesheet" href="css/dashboard.css">
@@ -12,50 +11,112 @@
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <h1>🩺 HealthGuard-AI</h1>
+        <!-- Header -->
+        <div class="header">
 
-    <p>
-        AI Powered Diabetes Prediction System
-    </p>
+            <div class="title-section">
+                <h1>🩺 HealthGuard-AI</h1>
+                <p>AI Powered Diabetes Prediction System</p>
+            </div>
 
-    <form id="predictionForm">
+            <div class="nav-buttons">
 
-        <input type="number" id="Pregnancies" placeholder="Pregnancies" required>
+                <button
+                    type="button"
+                    class="history-btn"
+                    onclick="window.location.href='pages/history.html'">
+                    📜 History
+                </button>
 
-        <input type="number" id="Glucose" placeholder="Glucose Level" required>
+                <button
+                    type="button"
+                    class="logout-btn"
+                    onclick="logout()">
+                    🚪 Logout
+                </button>
 
-        <input type="number" id="BloodPressure" placeholder="Blood Pressure" required>
+            </div>
 
-        <input type="number" id="SkinThickness" placeholder="Skin Thickness" required>
+        </div>
 
-        <input type="number" id="Insulin" placeholder="Insulin Level" required>
+        <!-- Prediction Form -->
+        <form id="predictionForm">
 
-        <input type="number" step="0.1" id="BMI" placeholder="BMI" required>
+            <input
+                type="number"
+                id="Pregnancies"
+                placeholder="Pregnancies"
+                required>
 
-        <input
-        type="number"
-        step="0.001"
-        id="DiabetesPedigreeFunction"
-        placeholder="Diabetes Pedigree Function"
-        required>
+            <input
+                type="number"
+                id="Glucose"
+                placeholder="Glucose Level"
+                required>
 
-        <input type="number" id="Age" placeholder="Age" required>
+            <input
+                type="number"
+                id="BloodPressure"
+                placeholder="Blood Pressure"
+                required>
 
-        <button type="submit">
-            Predict
-        </button>
+            <input
+                type="number"
+                id="SkinThickness"
+                placeholder="Skin Thickness"
+                required>
 
-    </form>
+            <input
+                type="number"
+                id="Insulin"
+                placeholder="Insulin Level"
+                required>
 
-    <div id="result" class="result-box">
+            <input
+                type="number"
+                step="0.1"
+                id="BMI"
+                placeholder="BMI"
+                required>
 
-</div>
+            <input
+                type="number"
+                step="0.001"
+                id="DiabetesPedigreeFunction"
+                placeholder="Diabetes Pedigree Function"
+                required>
 
-</div>
+            <input
+                type="number"
+                id="Age"
+                placeholder="Age"
+                required>
 
-<script src="js/prediction.js"></script>
+            <button type="submit">
+                Predict
+            </button>
+
+        </form>
+
+        <!-- Prediction Result -->
+        <div id="result" class="result-box"></div>
+
+    </div>
+
+    <script>
+        function logout() {
+
+            localStorage.removeItem("user");
+
+            window.location.href = "pages/login.html";
+
+        }
+    </script>
+
+    <script src="js/prediction.js"></script>
 
 </body>
+
 </html>

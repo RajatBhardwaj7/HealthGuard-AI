@@ -31,7 +31,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
         message.style.color = "black";
         message.innerHTML = "Creating Account...";
 
-        const response = await fetch("http://127.0.0.1:5000/register", {
+        const response = await fetch("http://127.0.0.1:5001/register", {
 
             method: "POST",
 
