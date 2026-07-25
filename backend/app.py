@@ -4,7 +4,7 @@ import joblib
 import numpy as np
 import os
 
-from database import (
+from backend.database import (
     create_tables,
     create_user,
     user_exists,
@@ -13,7 +13,7 @@ from database import (
     get_prediction_history
 )
 
-from auth import (
+from backend.auth import (
     hash_password,
     verify_password
 )
@@ -41,12 +41,14 @@ SCALER_PATH = os.path.join(
     "scaler.pkl"
 )
 
+
 model = joblib.load(MODEL_PATH)
 scaler = joblib.load(SCALER_PATH)
 
 
 # Create database tables
 create_tables()
+
 
 
 # ===========================================
@@ -56,6 +58,7 @@ create_tables()
 @app.route("/")
 def home():
     return "HealthGuard-AI Backend Running"
+
 
 
 # ===========================================
@@ -70,6 +73,7 @@ def register():
     name = data.get("name")
     email = data.get("email")
     password = data.get("password")
+
 
     if not name or not email or not password:
         return jsonify({
@@ -125,7 +129,6 @@ def login():
         return jsonify({
             "message": "Invalid email or password."
         }), 401
-
 
 
     return jsonify({
@@ -189,12 +192,10 @@ def predict():
     )
 
 
-
     return jsonify({
         "prediction": result,
         "probability": round(probability * 100, 2)
     })
-
 
 
 
@@ -221,22 +222,16 @@ def history():
         history_list.append({
 
             "prediction": row["prediction"],
-
             "probability": row["probability"],
-
             "glucose": row["glucose"],
-
             "bmi": row["bmi"],
-
             "age": row["age"],
-
             "date": row["created_at"]
 
         })
 
 
     return jsonify(history_list)
-
 
 
 
