@@ -9,6 +9,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
 
+
     // Password Match Check
     if (password !== confirmPassword) {
 
@@ -18,6 +19,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
         return;
     }
 
+
     const data = {
 
         name: name,
@@ -26,12 +28,14 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 
     };
 
+
     try {
 
         message.style.color = "black";
         message.innerHTML = "Creating Account...";
 
-        const response = await fetch("http://127.0.0.1:5001/register", {
+
+        const response = await fetch("https://healthguard-ai-backend-0xrz.onrender.com/register", {
 
             method: "POST",
 
@@ -45,12 +49,16 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 
         });
 
+
         const result = await response.json();
+
 
         if (response.ok) {
 
             message.style.color = "green";
+
             message.innerHTML = "✅ Account Created Successfully!";
+
 
             setTimeout(() => {
 
@@ -60,20 +68,25 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 
         }
 
+
         else {
 
             message.style.color = "red";
+
             message.innerHTML = result.message;
 
         }
 
+
     }
+
 
     catch (error) {
 
         console.error(error);
 
         message.style.color = "red";
+
         message.innerHTML = "❌ Cannot connect to server.";
 
     }
